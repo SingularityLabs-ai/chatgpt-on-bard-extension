@@ -8,11 +8,14 @@ import { captureEvent } from '../analytics'
 import { Answer } from '../messaging'
 import ChatGPTFeedback from './ChatGPTFeedback'
 import { isBraveBrowser, shouldShowRatingTip } from './utils.js'
+import Global from "./Global";
 
 export type QueryStatus = 'success' | 'error' | undefined
 
 interface Props {
   question: string
+  conversationId: string
+  messageId: string
   promptSource: string
   onStatusChange?: (status: QueryStatus) => void
 }
@@ -60,7 +63,15 @@ function ChatGPTQuery(props: Props) {
       }
     }
     port.onMessage.addListener(listener)
-    port.postMessage({ question: props.question })
+    if (props.conversationId != "0" || props.messageId != "0"){
+      port.postMessage({
+        question: props.question,
+        conversationId: props.conversationId,
+        parentMessageId: props.messageId,
+      })
+    } else {
+      port.postMessage({ question: props.question })
+    }
     return () => {
       port.onMessage.removeListener(listener)
       port.disconnect()
@@ -88,6 +99,8 @@ function ChatGPTQuery(props: Props) {
   useEffect(() => {
     if (status === 'success') {
       console.log('answer', answer)
+      Global.conversationId = answer.conversationId;
+      Global.messageId = answer.messageId;
       captureEvent('show_answer', { host: location.host, language: navigator.language })
     }
   }, [props.question, status])
@@ -95,69 +108,6 @@ function ChatGPTQuery(props: Props) {
   const openOptionsPage = useCallback(() => {
     Browser.runtime.sendMessage({ type: 'OPEN_OPTIONS_PAGE' })
   }, [])
-
-  // requestion
-  useEffect(() => {
-    if (!requestionList[questionIndex]) return
-    const port = Browser.runtime.connect()
-    const listener = (msg: any) => {
-      try {
-        if (msg.text) {
-          const requestionListValue = requestionList
-          requestionListValue[questionIndex].answer = msg
-          setRequestionList(requestionListValue)
-          const latestAnswerText = requestionList[questionIndex]?.answer?.text
-          setReQuestionLatestAnswerText(latestAnswerText)
-        } else if (msg.event === 'DONE') {
-          setReQuestionDone(true)
-          setQuestionIndex(questionIndex + 1)
-        }
-      } catch {
-        setReError(msg.error)
-      }
-    }
-    port.onMessage.addListener(listener)
-    port.postMessage({
-      question: requestionList[questionIndex].requestion,
-      conversationId: answer?.conversationId,
-      parentMessageId:
-        questionIndex == 0
-          ? answer?.messageId
-          : requestionList[questionIndex - 1].answer?.messageId,
-    })
-    return () => {
-      port.onMessage.removeListener(listener)
-      port.disconnect()
-    }
-  }, [requestionList, questionIndex, answer?.conversationId, answer?.messageId])
-
-  // * Requery Handler Function
-  const requeryHandler = useCallback(() => {
-    if (inputRef.current) {
-      setReQuestionDone(false)
-      const requestion = inputRef.current.value
-      setRequestionList([...requestionList, { requestion, index: questionIndex, answer: null }])
-      inputRef.current.value = ''
-    }
-  }, [requestionList, questionIndex])
-
-  const ReQuestionAnswerFixed = ({ text }: { text: string | undefined }) => {
-    if (!text) return <p className="text-[#b6b8ba] animate-pulse">Answering...</p>
-    return (
-      <ReactMarkdown rehypePlugins={[[rehypeHighlight, { detect: true }]]}>{text}</ReactMarkdown>
-    )
-  }
-
-  const ReQuestionAnswer = ({ latestAnswerText }: ReQuestionAnswerProps) => {
-    if (!latestAnswerText || requestionList[requestionList.length - 1]?.answer?.text == undefined) {
-      return <p className="text-[#b6b8ba] animate-pulse">Answering...</p>
-    }
-    return (
-      <ReactMarkdown rehypePlugins={[[rehypeHighlight, { detect: true }]]}>
-        {latestAnswerText}
-      </ReactMarkdown>
-    )
-  }
 
   if (answer) {
     return (
@@ -167,7 +117,6 @@ function ChatGPTQuery(props: Props) {
           <span className="cursor-pointer leading-[0]" onClick={openOptionsPage}>
             <GearIcon size={14} />
           </span>
-          <span className="mx-2 text-base text-gray-500">{`"${props.promptSource}" prompt is used`}</span>
           <ChatGPTFeedback
             messageId={answer.messageId}
             conversationId={answer.conversationId}
@@ -177,25 +126,6 @@ function ChatGPTQuery(props: Props) {
         <ReactMarkdown rehypePlugins={[[rehypeHighlight, { detect: true }]]}>
           {answer.text}
         </ReactMarkdown>
-        <div className="question-container">
-          {requestionList.map((requestion) => (
-            <div key={requestion.index}>
-              <div className="font-bold">{`Q${requestion.index + 1} : ${
-                requestion.requestion
-              }`}</div>
-              {reError ? (
-                <p>
-                  Failed to load response from ChatGPT:
-                  <span className="break-all block">{reError}</span>
-                </p>
-              ) : requestion.index < requestionList.length - 1 ? (
-                <ReQuestionAnswerFixed text={requestion.answer?.text} />
-              ) : (
-                <ReQuestionAnswer latestAnswerText={reQuestionLatestAnswerText} />
-              )}
-            </div>
-          ))}
-        </div>
       </div>
     )
   }

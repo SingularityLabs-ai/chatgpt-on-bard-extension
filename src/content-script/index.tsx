@@ -4,7 +4,7 @@ import { getUserConfig, Theme } from '../config'
 import { detectSystemColorScheme } from '../utils'
 import ChatGPTContainer from './ChatGPTContainer'
 import { config, SearchEngine } from './search-engine-configs'
-import { Global } from "./Global";
+import Global from "./Global";
 
 import './styles.scss'
 import { getPossibleElementByQuerySelector } from './utils'
@@ -36,7 +36,7 @@ async function mount(question: string, promptSource: string, siteConfig: SearchE
   console.log("siderbarContainer", siderbarContainer)
   if (siderbarContainer) {
     console.log('if container', container)
-    siderbarContainer.prepend(container)
+    siderbarContainer.append(container)
   } else {
     container.classList.add('sidebar-free')
     const appendContainer = getPossibleElementByQuerySelector(siteConfig.appendContainerQuery)
@@ -46,16 +46,48 @@ async function mount(question: string, promptSource: string, siteConfig: SearchE
     }
   }
   console.debug('question:', question)
+  console.log("Global.conversationId",Global.conversationId)
+  console.log("Global.messageId",Global.messageId)
 
   render(
     <ChatGPTContainer
       question={question}
+      conversationId={Global.conversationId}
+      messageId={Global.messageId}
       promptSource={promptSource}
       triggerMode={userConfig.triggerMode || 'always'}
     />,
     container,
   )
 }
+
+let last_query_time = 1
+async function render_already_mounted(
+  question: string,
+  promptSource: string,
+  siteConfig: SearchEngine,
+) {
+  console.log('props at index(render_already_mounted):', question, promptSource)
+  const container = document.createElement('div')
+  const allps = document.querySelectorAll('.chat-gpt-container') //#gpt-answer")
+  allps[allps.length - 1].appendChild(container)
+
+  last_query_time = Date.now()
+  console.log("Global.conversationId",Global.conversationId)
+  console.log("Global.messageId",Global.messageId)
+
+  render(
+    <ChatGPTContainer
+      question={question}
+      conversationId={Global.conversationId}
+      messageId={Global.messageId}
+      promptSource={promptSource}
+      triggerMode={'always'}
+    />,
+    container,
+  )
+}
+
 
 window.onload = function () {
   console.log('Page load completed')
@@ -105,3 +137,10 @@ window.onload = function () {
   });
 }
 
+window.setInterval(function () {
+  console.log('times=', Date.now(), last_query_time, Date.now() - last_query_time < 39000)
+  if (Date.now() - last_query_time < 39000) {
+    const gpt_container = document.querySelector('div.chat-gpt-container')
+    gpt_container.scroll({ top: gpt_container.scrollHeight, behavior: 'smooth' })
+  }
+}, 5000)

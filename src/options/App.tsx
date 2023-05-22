@@ -97,7 +97,7 @@ function OptionsPage(props: { theme: Theme; onThemeChange: (theme: Theme) => voi
         </Text>
 
         <PromptCard
-          header={'default'}
+          header={''}
           onSave={(prompt) => updateUserConfig({ prompt })}
           prompt={prompt}
         />

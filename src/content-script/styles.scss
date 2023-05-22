@@ -34,6 +34,7 @@ body.chakra-ui-light .overflow-y-hidden {
   flex-basis: 0;
   flex-grow: 1;
   z-index: 1;
+  overflow: scroll;
 
   .chat-gpt-card {
     border: 1px solid;
