@@ -1,0 +1,157 @@
+@import 'light.scss';
+@import 'dark.scss';
+
+// Hack for interviewbit
+html.cannot-touch, html.cannot-touch body, html.cannot-touch #root, html.cannot-touch .react-root, html.cannot-touch .react-root .interviewbit{
+    height: 500vh!important;
+}
+// End of Hack for interviewbit
+
+// Hack for leetcode
+body.chakra-ui-light, body.chakra-ui-light div#__next, body.chakra-ui-light div#__next div#qd-content, 
+body.chakra-ui-light .ant-menu-vertical-left.ant-menu-sub, 
+body.chakra-ui-light .ant-menu-vertical-right.ant-menu-sub, body.chakra-ui-light .ant-menu-vertical.ant-menu-sub, body.chakra-ui-light .ant-table-filter-dropdown-submenu>ul {
+  height: 200vh!important;
+}
+
+body.chakra-ui-light .ssg__qd-splitter-secondary-w, body.chakra-ui-light .ssg__qd-splitter-primary-w {
+  width: 30%!important;
+}
+
+body.chakra-ui-light .overflow-y-hidden {
+  overflow-y: visible;
+}
+// End of Hack for leetcode
+
+// Hack for codechef
+#problem-statement, #gpt-answer.markdown-body.gpt-markdown , #gpt-answer.markdown-body.gpt-markdown *{
+  color: #24292F!important;
+}
+// End of Hack for codechef
+
+.chat-gpt-container {
+  margin-bottom: 30px;
+  flex-basis: 0;
+  flex-grow: 1;
+  z-index: 1;
+
+  .chat-gpt-card {
+    border: 1px solid;
+    border-radius: 8px;
+    padding: 15px;
+    line-height: 1.5;
+  }
+
+  &.sidebar-free {
+    margin-left: 30px;
+    height: fit-content;
+  }
+
+  p {
+    margin: 0;
+  }
+
+  a.gpt-promotion-link {
+    &:hover {
+      text-decoration: none;
+    }
+    a:visited {
+      color: inherit;
+    }
+  }
+
+  .icon-and-text {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  #gpt-answer.markdown-body.gpt-markdown {
+    font-size: 15px;
+    line-height: 1.6;
+
+    pre {
+      margin-top: 10px;
+    }
+
+    & > p:not(:last-child) {
+      margin-bottom: 10px;
+    }
+
+    pre code {
+      white-space: pre-wrap;
+      word-break: break-all;
+    }
+
+    pre code.hljs {
+      padding: 0;
+      background-color: transparent;
+    }
+
+    ol li {
+      list-style: disc;
+    }
+
+    img {
+      width: 100%;
+    }
+
+    a {
+      text-decoration: underline;
+      &:visited {
+        color: unset;
+      }
+    }
+  }
+
+  .gpt-header {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    margin-bottom: 10px;
+    gap: 5px;
+
+    .gpt-feedback {
+      margin-left: auto;
+      display: flex;
+      gap: 6px;
+      cursor: pointer;
+    }
+
+    .gpt-feedback-selected {
+      color: #ff6347;
+    }
+  }
+}
+
+form#requestion {
+  input#question {
+    border-radius: 10px;
+    border: 2px solid #8e8ea0;
+    margin: 0px 2px 0px 2px;
+    padding: 1rem;
+    width: 100%;
+    outline: 2px #1b8f76;
+  }
+
+  input#question:focus {
+    border: 2px solid #1b8f76;
+    outline: none;
+  }
+
+  button#submit {
+    background-color: #1b8f76; /* Green */
+    border: none;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 0px 2px 0px 2px;
+    cursor: pointer;
+    border-radius:10px;
+  }
+}
+
