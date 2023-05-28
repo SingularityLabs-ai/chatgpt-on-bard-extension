@@ -62,7 +62,6 @@ async function mount(question: string, promptSource: string, siteConfig: SearchE
   )
 }
 
-// let last_query_time = 1
 async function render_already_mounted(
   question: string,
   promptSource: string,
@@ -73,7 +72,6 @@ async function render_already_mounted(
   const allps = document.querySelectorAll('.chat-gpt-container') //#gpt-answer")
   allps[allps.length - 1].appendChild(container)
 
-  // last_query_time = Date.now()
   console.log("Global.conversationId",Global.conversationId)
   console.log("Global.messageId",Global.messageId)
 
@@ -89,14 +87,42 @@ async function render_already_mounted(
   )
 }
 
+function _waitForElements(selector, delay = 50, tries = 100) {
+    const element = document.querySelectorAll(selector);
+
+    if (!window[`__${selector}`]) {
+      window[`__${selector}`] = 0;
+      window[`__${selector}__delay`] = delay;
+      window[`__${selector}__tries`] = tries;
+    }
+
+    function _search() {
+      return new Promise((resolve) => {
+        window[`__${selector}`]++;
+        setTimeout(resolve, window[`__${selector}__delay`]);
+      });
+    }
+
+    if (element === null) {
+      if (window[`__${selector}`] >= window[`__${selector}__tries`]) {
+        window[`__${selector}`] = 0;
+        return Promise.resolve(null);
+      }
+
+      return _search().then(() => _waitForElement(selector));
+    } else {
+      return Promise.resolve(element);
+    }
+}
+
 window.onload = function () {
   console.log('Page load completed')
   let textBu;
   const textarea = document.getElementById('mat-input-0');
 
-  window.setTimeout(function () {
-    const suggested_prompts = document.querySelectorAll("div.suggestion-container button");
-    console.log("suggested_prompts", suggested_prompts)
+  const start = (async () => {
+    const suggested_prompts = await _waitForElements(`div.suggestion-container button`);
+    console.log("suggested_prompts:", suggested_prompts);
     for (var i = 0; i < suggested_prompts.length; i++) {
       suggested_prompts[i].addEventListener('click', (event) => {
         console.log(event)
@@ -115,7 +141,7 @@ window.onload = function () {
         return false
       })
     }
-  }, 2000)
+  })();
 
   const text_entered_buttons = document.getElementsByClassName('send-button-container')
   console.log("text_entered_buttons", text_entered_buttons)
@@ -159,13 +185,4 @@ window.onload = function () {
     textBu = event.target.value
   });
 }
-
-// window.setInterval(function () {
-//   console.log('times=', Date.now(), last_query_time, Date.now() - last_query_time < 39000)
-//   if (Date.now() - last_query_time < 39000 && Global.done == true) {
-//     const gpt_container = document.querySelector('div.chat-gpt-container')
-//     gpt_container.scroll({ top: gpt_container.scrollHeight, behavior: 'smooth' })
-//     Global.done = false
-//   }
-// }, 5000)
 
