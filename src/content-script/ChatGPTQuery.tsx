@@ -63,6 +63,7 @@ function ChatGPTQuery(props: Props) {
       }
     }
     port.onMessage.addListener(listener)
+    Global.done = false
     if (props.conversationId != "0" || props.messageId != "0"){
       port.postMessage({
         question: props.question,
@@ -101,6 +102,7 @@ function ChatGPTQuery(props: Props) {
       console.log('answer', answer)
       Global.conversationId = answer.conversationId;
       Global.messageId = answer.messageId;
+      Global.done = true
       captureEvent('show_answer', { host: location.host, language: navigator.language })
     }
   }, [props.question, status])

@@ -88,10 +88,33 @@ async function render_already_mounted(
   )
 }
 
-
 window.onload = function () {
   console.log('Page load completed')
-  const textarea = document.getElementById('mat-input-0')
+  let textBu;
+  const textarea = document.getElementById('mat-input-0');
+
+  window.setTimeout(function () {
+    const suggested_prompts = document.querySelectorAll("div.suggestion-container button");
+    console.log("suggested_prompts", suggested_prompts)
+    for (var i = 0; i < suggested_prompts.length; i++) {
+      suggested_prompts[i].addEventListener('click', (event) => {
+        console.log(event)
+        textBu = event.target.innerText
+        textarea.dispatchEvent(
+          new KeyboardEvent('keydown', {
+            bubbles: true,
+            cancelable: true,
+            isTrusted: true,
+            key: 'Enter',
+            code: 'Enter',
+            location: 0,
+            ctrlKey: false,
+          }),
+        )
+        return false
+      })
+    }
+  }, 2000)
 
   const text_entered_buttons = document.getElementsByClassName('send-button-container')
   console.log("text_entered_buttons", text_entered_buttons)
@@ -116,7 +139,6 @@ window.onload = function () {
     })
   }
 
-  let textBu;
   textarea.addEventListener('keydown', (event) => {
     if (event.key === 'Enter') {
       console.log('Enter key pressed! textBu: ' + textBu)
@@ -130,7 +152,7 @@ window.onload = function () {
       if (gpt_container) {
         gpt_container.scroll({ top: gpt_container.scrollHeight, behavior: 'smooth' })
       }
-    } 
+    }
   })
   textarea.addEventListener('keyup', (event) => {
     textBu = event.target.value
@@ -139,8 +161,9 @@ window.onload = function () {
 
 window.setInterval(function () {
   console.log('times=', Date.now(), last_query_time, Date.now() - last_query_time < 39000)
-  if (Date.now() - last_query_time < 39000) {
+  if (Date.now() - last_query_time < 39000 && Global.done == true) {
     const gpt_container = document.querySelector('div.chat-gpt-container')
     gpt_container.scroll({ top: gpt_container.scrollHeight, behavior: 'smooth' })
+    Global.done = false
   }
 }, 5000)
