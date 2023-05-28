@@ -60,6 +60,14 @@ function ChatGPTQuery(props: Props) {
       } else if (msg.event === 'DONE') {
         setDone(true)
         setReQuestionDone(true)
+        Global.done = true
+        window.setTimeout(function () {
+          if (Global.done == true) {
+            const gpt_container = document.querySelector('div.chat-gpt-container')
+            gpt_container.scroll({ top: gpt_container.scrollHeight, behavior: 'smooth' })
+            Global.done = false
+          }
+        }, 1000)
       }
     }
     port.onMessage.addListener(listener)
@@ -102,7 +110,6 @@ function ChatGPTQuery(props: Props) {
       console.log('answer', answer)
       Global.conversationId = answer.conversationId;
       Global.messageId = answer.messageId;
-      Global.done = true
       captureEvent('show_answer', { host: location.host, language: navigator.language })
     }
   }, [props.question, status])

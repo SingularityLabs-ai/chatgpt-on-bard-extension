@@ -5,6 +5,7 @@ import { detectSystemColorScheme } from '../utils'
 import ChatGPTContainer from './ChatGPTContainer'
 import { config, SearchEngine } from './search-engine-configs'
 import Global from "./Global";
+import { useEffect, useState } from 'preact/hooks'
 
 import './styles.scss'
 import { getPossibleElementByQuerySelector } from './utils'
@@ -61,7 +62,7 @@ async function mount(question: string, promptSource: string, siteConfig: SearchE
   )
 }
 
-let last_query_time = 1
+// let last_query_time = 1
 async function render_already_mounted(
   question: string,
   promptSource: string,
@@ -72,7 +73,7 @@ async function render_already_mounted(
   const allps = document.querySelectorAll('.chat-gpt-container') //#gpt-answer")
   allps[allps.length - 1].appendChild(container)
 
-  last_query_time = Date.now()
+  // last_query_time = Date.now()
   console.log("Global.conversationId",Global.conversationId)
   console.log("Global.messageId",Global.messageId)
 
@@ -159,11 +160,12 @@ window.onload = function () {
   });
 }
 
-window.setInterval(function () {
-  console.log('times=', Date.now(), last_query_time, Date.now() - last_query_time < 39000)
-  if (Date.now() - last_query_time < 39000 && Global.done == true) {
-    const gpt_container = document.querySelector('div.chat-gpt-container')
-    gpt_container.scroll({ top: gpt_container.scrollHeight, behavior: 'smooth' })
-    Global.done = false
-  }
-}, 5000)
+// window.setInterval(function () {
+//   console.log('times=', Date.now(), last_query_time, Date.now() - last_query_time < 39000)
+//   if (Date.now() - last_query_time < 39000 && Global.done == true) {
+//     const gpt_container = document.querySelector('div.chat-gpt-container')
+//     gpt_container.scroll({ top: gpt_container.scrollHeight, behavior: 'smooth' })
+//     Global.done = false
+//   }
+// }, 5000)
+
