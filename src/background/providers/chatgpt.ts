@@ -2,6 +2,7 @@ import ExpiryMap from 'expiry-map'
 import { v4 as uuidv4 } from 'uuid'
 import { fetchSSE } from '../fetch-sse'
 import { GenerateAnswerParams, Provider } from '../types'
+import Browser from 'webextension-polyfill'
 
 async function request(token: string, method: string, path: string, data?: unknown) {
   return fetch(`https://chat.openai.com/backend-api${path}`, {
@@ -121,6 +122,8 @@ export class ChatGPTProvider implements Provider {
         }
         const text = data.message?.content?.parts?.[0] + '✏'
         if (text) {
+          Browser.storage.local.set({"conversationId": data.conversation_id});
+          Browser.storage.local.set({"messageId": data.message.id});
           conversationId = data.conversation_id
           params.onEvent({
             type: 'answer',

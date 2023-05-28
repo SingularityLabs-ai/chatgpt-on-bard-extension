@@ -1,5 +1,5 @@
 import Browser from 'webextension-polyfill'
-import { getProviderConfigs, ProviderType } from '../config'
+import { getChatGPTChatIds, getProviderConfigs, ProviderType } from '../config'
 import { ChatGPTProvider, getChatGPTAccessToken, sendMessageFeedback } from './providers/chatgpt'
 import { OpenAIProvider } from './providers/openai'
 import { Provider } from './types'
@@ -10,6 +10,16 @@ async function generateAnswers(
   conversationId: string | undefined,
   parentMessageId: string | undefined,
 ) {
+  const chatIds = await getChatGPTChatIds()
+  console.log("chatIds", chatIds)
+  if (conversationId == null || parentMessageId == null) {
+    if (chatIds.conversationId != "0" && chatIds.messageId != "0"){
+      conversationId = chatIds.conversationId;
+      parentMessageId = chatIds.messageId;
+    }
+  }
+  console.log("conversationId",conversationId)
+  console.log("parentMessageId",parentMessageId)
   const providerConfigs = await getProviderConfigs()
 
   let provider: Provider
@@ -46,7 +56,7 @@ async function generateAnswers(
 
 Browser.runtime.onConnect.addListener((port) => {
   port.onMessage.addListener(async (msg) => {
-    console.debug('received msg', msg)
+    console.debug('received question msg', msg)
     try {
       await generateAnswers(port, msg.question, msg.conversationId, msg.parentMessageId)
     } catch (err: any) {

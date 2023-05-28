@@ -66,6 +66,11 @@ export enum ProviderType {
   GPT3 = 'gpt3',
 }
 
+interface ChatGPTChatIds {
+  conversationId: string
+  messageId: string
+}
+
 interface GPT3ProviderConfig {
   model: string
   apiKey: string
@@ -76,6 +81,12 @@ export interface ProviderConfigs {
   configs: {
     [ProviderType.GPT3]: GPT3ProviderConfig | undefined
   }
+}
+
+export async function getChatGPTChatIds(): Promise<ChatGPTChatIds> {
+  const { conversationId = "0" } = await Browser.storage.local.get('conversationId')
+  const { messageId = "0" } = await Browser.storage.local.get('messageId')
+  return { conversationId, messageId }
 }
 
 export async function getProviderConfigs(): Promise<ProviderConfigs> {
