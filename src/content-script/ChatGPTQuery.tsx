@@ -122,6 +122,13 @@ function ChatGPTQuery(props: Props) {
     return (
       <div className="markdown-body gpt-markdown" id="gpt-answer" dir="auto">
         <div className="gpt-header">
+          <span className="font-bold">Me</span>
+        </div>
+        <ReactMarkdown rehypePlugins={[[rehypeHighlight, { detect: true }]]}>
+          {props.question}
+        </ReactMarkdown>
+
+        <div className="gpt-header">
           <span className="font-bold">ChatGPT</span>
           <span className="cursor-pointer leading-[0]" onClick={openOptionsPage}>
             <GearIcon size={14} />

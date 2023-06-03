@@ -118,6 +118,8 @@ function _waitForElements(selector, delay = 50, tries = 100) {
 window.onload = function () {
   console.log('Page load completed')
   let textBu;
+  for(var i =0;i<2000000000;i++){var j = 0;j=j|j;}
+  console.log("Waited ", 20000)
   const textarea = document.getElementById('mat-input-0');
 
   const start = (async () => {
@@ -143,10 +145,18 @@ window.onload = function () {
     }
   })();
 
-  const text_entered_buttons = document.getElementsByClassName('send-button-container')
+  let text_entered_buttons = document.getElementsByClassName('send-button-container')
   console.log("text_entered_buttons", text_entered_buttons)
-  const text_entered_button = text_entered_buttons[0]
-  console.log('Tag: ' + text_entered_button.tagName)
+  let text_entered_button = text_entered_buttons[0]
+
+  if (text_entered_button) {
+    console.log('Tag: ' + text_entered_button.tagName);
+  } else {
+    setTimeout(() => {
+      window.location.reload();
+    }, 500)
+  }
+
   if (text_entered_button.tagName == 'DIV') {
     text_entered_button.addEventListener('click', (event) => {
       console.log('Pressed: ' + text_entered_button.tagName)
