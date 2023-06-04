@@ -118,7 +118,7 @@ function _waitForElements(selector, delay = 50, tries = 100) {
 window.onload = function () {
   console.log('Page load completed')
   let textBu;
-  for(var i =0;i<2000000000;i++){var j = 0;j=j|j;}
+  for(var i = 0; i < 1000000000; i++){var j = 0;j = j|j;}
   console.log("Waited ", 20000)
   const textarea = document.getElementById('mat-input-0');
 
