@@ -157,7 +157,7 @@ window.onload = function () {
     }, 500)
   }
 
-  if (text_entered_button.tagName == 'DIV') {
+  if (text_entered_button?.tagName == 'DIV') {
     text_entered_button.addEventListener('click', (event) => {
       console.log('Pressed: ' + text_entered_button.tagName)
       console.log('Now button press to enter(keydown) conversion step', event)
