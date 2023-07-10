@@ -75,14 +75,14 @@ function OptionsPage(props: { theme: Theme; onThemeChange: (theme: Theme) => voi
         </div>
         <div className="flex flex-row gap-3">
           <a
-            href="https://github.com/ishandutta2007/chatgpt-on-bard-extension/issues"
+            href="https://github.com/SingularityLabs-ai/chatgpt-on-bard-extension/issues"
             target="_blank"
             rel="noreferrer"
           >
             Feedback
           </a>
           <a
-            href="https://github.com/ishandutta2007/chatgpt-on-bard-extension"
+            href="https://github.com/SingularityLabs-ai/chatgpt-on-bard-extension"
             target="_blank"
             rel="noreferrer"
           >
@@ -96,11 +96,7 @@ function OptionsPage(props: { theme: Theme; onThemeChange: (theme: Theme) => voi
           Prompt
         </Text>
 
-        <PromptCard
-          header={''}
-          onSave={(prompt) => updateUserConfig({ prompt })}
-          prompt={prompt}
-        />
+        <PromptCard header={''} onSave={(prompt) => updateUserConfig({ prompt })} prompt={prompt} />
 
         {promptOverrides.map((override, index) => {
           return (

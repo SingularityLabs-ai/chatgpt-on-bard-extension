@@ -7,8 +7,8 @@ import Browser from 'webextension-polyfill'
 import { captureEvent } from '../analytics'
 import { Answer } from '../messaging'
 import ChatGPTFeedback from './ChatGPTFeedback'
+import Global from './Global'
 import { isBraveBrowser, shouldShowRatingTip } from './utils.js'
-import Global from "./Global";
 
 export type QueryStatus = 'success' | 'error' | undefined
 
@@ -72,7 +72,7 @@ function ChatGPTQuery(props: Props) {
     }
     port.onMessage.addListener(listener)
     Global.done = false
-    if (props.conversationId != "0" || props.messageId != "0"){
+    if (props.conversationId != '0' || props.messageId != '0') {
       port.postMessage({
         question: props.question,
         conversationId: props.conversationId,
@@ -108,8 +108,8 @@ function ChatGPTQuery(props: Props) {
   useEffect(() => {
     if (status === 'success') {
       console.log('answer', answer)
-      Global.conversationId = answer.conversationId;
-      Global.messageId = answer.messageId;
+      Global.conversationId = answer.conversationId
+      Global.messageId = answer.messageId
       captureEvent('show_answer', { host: location.host, language: navigator.language })
     }
   }, [props.question, status])
@@ -159,7 +159,7 @@ function ChatGPTQuery(props: Props) {
               return (
                 <span className="block mt-2">
                   Still not working? Follow{' '}
-                  <a href="https://github.com/ishandutta2007/chatgpt-on-bard-extension#troubleshooting">
+                  <a href="https://github.com/SingularityLabs-ai/chatgpt-on-bard-extension#troubleshooting">
                     Brave Troubleshooting
                   </a>
                 </span>
