@@ -31,8 +31,8 @@ async function mount(question: string, promptSource: string, siteConfig: SearchE
     container.classList.add('gpt-light')
   }
 
-  const siderbarContainer = getPossibleElementByQuerySelector(siteConfig.sidebarContainerQuery)
-  console.log('locating', siteConfig.sidebarContainerQuery)
+  const siderbarContainer = getPossibleElementByQuerySelector(siteConfig.chatWindowSelector)
+  console.log('locating', siteConfig.chatWindowSelector)
   console.log('siderbarContainer', siderbarContainer)
   if (siderbarContainer) {
     console.log('if container', container)
