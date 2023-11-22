@@ -123,7 +123,8 @@ window.onload = function () {
   }
   console.log('Waited ', 20000)
   // const textarea = document.getElementById('mat-input-0')
-  const textarea = document.getElementsByClassName(siteConfig.promptTextareaSelector)[0]
+  const textareas = document.getElementsByClassName(siteConfig.promptTextareaSelector)
+  const textarea = textareas[0]
   console.log('textarea ', textarea)
 
   const start = (async () => {
@@ -154,7 +155,7 @@ window.onload = function () {
     }
   })()
 
-  const text_entered_buttons = document.getElementsByClassName('send-button-container')
+  const text_entered_buttons = document.getElementsByClassName(siteConfig.promptSendButtonSelector)
   console.log('text_entered_buttons', text_entered_buttons)
   const text_entered_button = text_entered_buttons[0]
 
