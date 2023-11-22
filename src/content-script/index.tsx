@@ -122,7 +122,8 @@ window.onload = function () {
     j = j | j
   }
   console.log('Waited ', 20000)
-  const textarea = document.getElementById('mat-input-0')
+  // const textarea = document.getElementById('mat-input-0')
+  const textarea = document.getElementsByClassName('text-input-field_textarea')[0]
   console.log('textarea ', textarea)
 
   const start = (async () => {
@@ -132,6 +133,7 @@ window.onload = function () {
       suggested_prompts[i].addEventListener('click', (event) => {
         console.log(event)
         textBu = event.target.innerText
+        console.log('now textBu = ', textBu)
         if (textarea) {
           textarea.dispatchEvent(
             new KeyboardEvent('keydown', {
@@ -195,19 +197,26 @@ window.onload = function () {
         console.log('Enter key pressed! textBu: ' + textBu)
         const text = textBu
         event.preventDefault() // Prevent the default Enter key behavior (e.g., line break)
-        const bodyInnerText = text.trim().replace(/\s+/g, ' ').substring(0, 1500)
-        console.log('final prompt:', bodyInnerText)
-        const gpt_container = document.querySelector('div.chat-gpt-container')
-        console.log('gpt_container:', gpt_container)
-        if (!gpt_container) mount(bodyInnerText, 'default', siteConfig)
-        else render_already_mounted(bodyInnerText, 'default', siteConfig)
-        if (gpt_container) {
-          gpt_container.scroll({ top: gpt_container.scrollHeight, behavior: 'smooth' })
+        if (text) {
+          const bodyInnerText = text.trim().replace(/\s+/g, ' ').substring(0, 1500)
+          console.log('final prompt:', bodyInnerText)
+          const gpt_container = document.querySelector('div.chat-gpt-container')
+          console.log('gpt_container:', gpt_container)
+          if (!gpt_container) mount(bodyInnerText, 'default', siteConfig)
+          else render_already_mounted(bodyInnerText, 'default', siteConfig)
+          if (gpt_container) {
+            gpt_container.scroll({ top: gpt_container.scrollHeight, behavior: 'smooth' })
+          }
+        } else {
+          console.log('cant find textBu')
         }
+      } else {
+        //
       }
     })
     textarea.addEventListener('keyup', (event) => {
-      textBu = event.target.value
+      textBu = event.target.innerText
+      console.log('now textBu after keyup= ', textBu)
     })
   } else {
     console.log('cant find textarea')
