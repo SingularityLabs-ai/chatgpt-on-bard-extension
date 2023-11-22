@@ -1,6 +1,6 @@
 export interface SearchEngine {
-  inputQuery: string[]
-  bodyQuery: string[]
+  // inputQuery: string[]
+  // bodyQuery: string[]
   sidebarContainerQuery: string[]
   appendContainerQuery: string[]
   watchRouteChange?: (callback: () => void) => void
@@ -8,9 +8,9 @@ export interface SearchEngine {
 
 export const config: Record<string, SearchEngine> = {
   bard: {
-    inputQuery: ["textarea"],
-    bodyQuery: ['textarea'],
+    // inputQuery: ["textarea"],
+    // bodyQuery: ['textarea'],
     sidebarContainerQuery: ['chat-window'],
     appendContainerQuery: [],
-  }
+  },
 }
