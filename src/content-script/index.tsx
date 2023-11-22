@@ -195,6 +195,16 @@ window.onload = function () {
     textarea.addEventListener('keydown', (event) => {
       console.log('event=', event)
       if (event.key === 'Enter' && event.composed === false) {
+        if (textBu == undefined || textBu.trim() == '') {
+          const userQueriesListElems = document.querySelectorAll(siteConfig.userQueriesListSelector)
+          console.log('userQueriesListElems', userQueriesListElems)
+          const userQueriesListElem = userQueriesListElems[userQueriesListElems.length - 1]
+          console.log('userQueriesListElem', userQueriesListElem)
+          if (userQueriesListElem) {
+            console.log('userQueriesListElem.innerText', userQueriesListElem.innerText)
+            textBu = userQueriesListElem.innerText
+          }
+        }
         console.log('Enter key pressed! textBu: ' + textBu)
         const text = textBu
         event.preventDefault() // Prevent the default Enter key behavior (e.g., line break)
