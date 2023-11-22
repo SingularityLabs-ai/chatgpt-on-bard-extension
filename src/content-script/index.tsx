@@ -191,35 +191,74 @@ window.onload = function () {
     })
   }
 
+  function extract_textBu_from_chat() {
+    let textBuRet = ''
+    const userQueriesListElems = document.querySelectorAll(siteConfig.userQueriesListSelector)
+    console.log('userQueriesListElems', userQueriesListElems)
+    const userQueriesListElem = userQueriesListElems[userQueriesListElems.length - 1]
+    console.log('userQueriesListElem', userQueriesListElem)
+    if (userQueriesListElem) {
+      console.log('userQueriesListElem.innerText', userQueriesListElem.innerText)
+      textBuRet = userQueriesListElem.innerText
+    }
+    return textBuRet
+  }
+
+  function mount_or_render_then_scroll(text) {
+    const bodyInnerText = text.trim().replace(/\s+/g, ' ').substring(0, 1500)
+    console.log('final prompt:', bodyInnerText)
+    const gpt_container = document.querySelector('div.chat-gpt-container')
+    console.log('gpt_container:', gpt_container)
+    if (!gpt_container) mount(bodyInnerText, 'default', siteConfig)
+    else render_already_mounted(bodyInnerText, 'default', siteConfig)
+    if (gpt_container) {
+      gpt_container.scroll({ top: gpt_container.scrollHeight, behavior: 'smooth' })
+    }
+  }
+
+  function template_followed_by_enter_case(event) {
+    textBu = extract_textBu_from_chat()
+    console.log('Enter key pressed! textBu: ' + textBu)
+    const text = textBu
+    event.preventDefault() // Prevent the default Enter key behavior (e.g., line break)
+    if (text) {
+      mount_or_render_then_scroll(text)
+    } else {
+      console.log('cant find textBu')
+    }
+  }
+
+  function template_followed_by_sendbutton_case(event) {
+    textBu = extract_textBu_from_chat()
+    console.log('Enter key pressed! textBu: ' + textBu)
+    const text = textBu
+    event.preventDefault() // Prevent the default Enter key behavior (e.g., line break)
+    if (text) {
+      mount_or_render_then_scroll(text)
+    } else {
+      console.log('cant find textBu')
+    }
+  }
+
+  function typeprompt_followed_by_sendbutton_case(event) {
+    console.log('Enter key pressed! textBu: ' + textBu)
+    const text = textBu
+    event.preventDefault() // Prevent the default Enter key behavior (e.g., line break)
+    if (text) {
+      mount_or_render_then_scroll(text)
+    } else {
+      console.log('cant find textBu')
+    }
+  }
+
   if (textarea) {
     textarea.addEventListener('keydown', (event) => {
       console.log('event=', event)
       if (event.key === 'Enter' && event.composed === false) {
         if (textBu == undefined || textBu.trim() == '') {
-          const userQueriesListElems = document.querySelectorAll(siteConfig.userQueriesListSelector)
-          console.log('userQueriesListElems', userQueriesListElems)
-          const userQueriesListElem = userQueriesListElems[userQueriesListElems.length - 1]
-          console.log('userQueriesListElem', userQueriesListElem)
-          if (userQueriesListElem) {
-            console.log('userQueriesListElem.innerText', userQueriesListElem.innerText)
-            textBu = userQueriesListElem.innerText
-          }
-        }
-        console.log('Enter key pressed! textBu: ' + textBu)
-        const text = textBu
-        event.preventDefault() // Prevent the default Enter key behavior (e.g., line break)
-        if (text) {
-          const bodyInnerText = text.trim().replace(/\s+/g, ' ').substring(0, 1500)
-          console.log('final prompt:', bodyInnerText)
-          const gpt_container = document.querySelector('div.chat-gpt-container')
-          console.log('gpt_container:', gpt_container)
-          if (!gpt_container) mount(bodyInnerText, 'default', siteConfig)
-          else render_already_mounted(bodyInnerText, 'default', siteConfig)
-          if (gpt_container) {
-            gpt_container.scroll({ top: gpt_container.scrollHeight, behavior: 'smooth' })
-          }
+          template_followed_by_sendbutton_case(event)
         } else {
-          console.log('cant find textBu')
+          typeprompt_followed_by_sendbutton_case(event)
         }
       } else {
         //
@@ -227,6 +266,9 @@ window.onload = function () {
     })
     textarea.addEventListener('keyup', (event) => {
       textBu = event.target.innerText
+      if (textBu == undefined || textBu.trim() == '') {
+        template_followed_by_enter_case(event)
+      }
       console.log('now textBu after keyup= ', textBu)
     })
   } else {
