@@ -123,7 +123,7 @@ window.onload = function () {
   }
   console.log('Waited ', 20000)
   // const textarea = document.getElementById('mat-input-0')
-  const textarea = document.getElementsByClassName(siteConfig.domTextareaSelector)[0]
+  const textarea = document.getElementsByClassName(siteConfig.promptTextareaSelector)[0]
   console.log('textarea ', textarea)
 
   const start = (async () => {
