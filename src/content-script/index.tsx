@@ -122,38 +122,37 @@ window.onload = function () {
     j = j | j
   }
   console.log('Waited ', 20000)
-  // const textarea = document.getElementById('mat-input-0')
   const textareas = document.getElementsByClassName(siteConfig.promptTextareaSelector)
   const textarea = textareas[0]
   console.log('textarea ', textarea)
 
-  const start = (async () => {
-    const suggested_prompts = await _waitForElements(`div.suggestion-container button`)
-    console.log('suggested_prompts:', suggested_prompts)
-    for (let i = 0; i < suggested_prompts.length; i++) {
-      suggested_prompts[i].addEventListener('click', (event) => {
-        console.log(event)
-        textBu = event.target.innerText
-        console.log('now textBu = ', textBu)
-        if (textarea) {
-          textarea.dispatchEvent(
-            new KeyboardEvent('keydown', {
-              bubbles: true,
-              cancelable: true,
-              isTrusted: true,
-              key: 'Enter',
-              code: 'Enter',
-              location: 0,
-              ctrlKey: false,
-            }),
-          )
-        } else {
-          console.log('cant find textarea')
-        }
-        return false
-      })
-    }
-  })()
+  // const start = (async () => {
+  //   const suggested_prompts = await _waitForElements(`div.suggestion-container button`)
+  //   console.log('suggested_prompts:', suggested_prompts)
+  //   for (let i = 0; i < suggested_prompts.length; i++) {
+  //     suggested_prompts[i].addEventListener('click', (event) => {
+  //       console.log(event)
+  //       textBu = event.target.innerText
+  //       console.log('now textBu = ', textBu)
+  //       if (textarea) {
+  //         textarea.dispatchEvent(
+  //           new KeyboardEvent('keydown', {
+  //             bubbles: true,
+  //             cancelable: true,
+  //             isTrusted: true,
+  //             key: 'Enter',
+  //             code: 'Enter',
+  //             location: 0,
+  //             ctrlKey: false,
+  //           }),
+  //         )
+  //       } else {
+  //         console.log('cant find textarea')
+  //       }
+  //       return false
+  //     })
+  //   }
+  // })()
 
   const text_entered_buttons = document.getElementsByClassName(siteConfig.promptSendButtonSelector)
   console.log('text_entered_buttons', text_entered_buttons)
@@ -217,8 +216,9 @@ window.onload = function () {
   }
 
   function template_followed_by_enter_case(event) {
+    console.log('template_followed_by_enter_case:event: ', event)
     textBu = extract_textBu_from_chat()
-    console.log('Enter key pressed! textBu: ' + textBu)
+    console.log('template_followed_by_enter_case:Enter key pressed! textBu: ' + textBu)
     const text = textBu
     event.preventDefault() // Prevent the default Enter key behavior (e.g., line break)
     if (text) {
@@ -230,7 +230,7 @@ window.onload = function () {
 
   function template_followed_by_sendbutton_case(event) {
     textBu = extract_textBu_from_chat()
-    console.log('Enter key pressed! textBu: ' + textBu)
+    console.log('template_followed_by_sendbutton_case:Enter key pressed! textBu: ' + textBu)
     const text = textBu
     event.preventDefault() // Prevent the default Enter key behavior (e.g., line break)
     if (text) {
@@ -240,8 +240,11 @@ window.onload = function () {
     }
   }
 
-  function typeprompt_followed_by_sendbutton_case(event) {
-    console.log('Enter key pressed! textBu: ' + textBu)
+  function typeprompt_followed_by_sendbutton_or_enter_case(event) {
+    console.log('typeprompt_followed_by_sendbutton_or_enter_case:event: ', event)
+    console.log(
+      'typeprompt_followed_by_sendbutton_or_enter_case:Enter key pressed! textBu: ' + textBu,
+    )
     const text = textBu
     event.preventDefault() // Prevent the default Enter key behavior (e.g., line break)
     if (text) {
@@ -251,6 +254,7 @@ window.onload = function () {
     }
   }
 
+  let typeenterdone = false
   if (textarea) {
     textarea.addEventListener('keydown', (event) => {
       console.log('event=', event)
@@ -258,7 +262,8 @@ window.onload = function () {
         if (textBu == undefined || textBu.trim() == '') {
           template_followed_by_sendbutton_case(event)
         } else {
-          typeprompt_followed_by_sendbutton_case(event)
+          typeprompt_followed_by_sendbutton_or_enter_case(event)
+          typeenterdone = true
         }
       } else {
         //
@@ -267,7 +272,10 @@ window.onload = function () {
     textarea.addEventListener('keyup', (event) => {
       textBu = event.target.innerText
       if (textBu == undefined || textBu.trim() == '') {
-        template_followed_by_enter_case(event)
+        //all enter case comes here but type-enter case already done so we should skip it
+        if (typeenterdone == false) template_followed_by_enter_case(event)
+      } else {
+        typeenterdone = false
       }
       console.log('now textBu after keyup= ', textBu)
     })
