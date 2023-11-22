@@ -272,7 +272,7 @@ window.onload = function () {
     textarea.addEventListener('keyup', (event) => {
       textBu = event.target.innerText
       if (textBu == undefined || textBu.trim() == '') {
-        //all enter case comes here but type-enter case already done so we should skip it
+        //all blank textarea-enter case comes here but type-enter case already done so we should skip it
         if (typeenterdone == false) template_followed_by_enter_case(event)
       } else {
         typeenterdone = false
