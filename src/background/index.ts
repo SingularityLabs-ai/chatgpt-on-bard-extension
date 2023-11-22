@@ -4,6 +4,8 @@ import { ChatGPTProvider, getChatGPTAccessToken, sendMessageFeedback } from './p
 import { OpenAIProvider } from './providers/openai'
 import { Provider } from './types'
 
+const CHATGPTONBARD_UNINSTALL_TYPEFORM_URL = 'https://survey.typeform.com/to/g9hbMnT8'
+
 async function generateAnswers(
   port: Browser.Runtime.Port,
   question: string,
@@ -11,15 +13,15 @@ async function generateAnswers(
   parentMessageId: string | undefined,
 ) {
   const chatIds = await getChatGPTChatIds()
-  console.log("chatIds", chatIds)
+  console.log('chatIds', chatIds)
   if (conversationId == null || parentMessageId == null) {
-    if (chatIds.conversationId != "0" && chatIds.messageId != "0"){
-      conversationId = chatIds.conversationId;
-      parentMessageId = chatIds.messageId;
+    if (chatIds.conversationId != '0' && chatIds.messageId != '0') {
+      conversationId = chatIds.conversationId
+      parentMessageId = chatIds.messageId
     }
   }
-  console.log("conversationId",conversationId)
-  console.log("parentMessageId",parentMessageId)
+  console.log('conversationId', conversationId)
+  console.log('parentMessageId', parentMessageId)
   const providerConfigs = await getProviderConfigs()
 
   let provider: Provider
@@ -82,3 +84,5 @@ Browser.runtime.onInstalled.addListener((details) => {
     Browser.runtime.openOptionsPage()
   }
 })
+
+Browser.runtime.setUninstallURL(CHATGPTONBARD_UNINSTALL_TYPEFORM_URL)
