@@ -3,11 +3,11 @@ import { memo } from 'react'
 import discordIcon from '../assets/icons/discord-black-thin.svg'
 export const DISCORD_HOME = 'https://discord.gg/jc4xtF58Ve'
 
-import twitterIcon from '../assets/icons/twitter-black-thin.svg'
-export const TWITTER_HOME = 'https://twitter.com/labssingularity'
-
 import githubIcon from '../assets/icons/github-black-thin.svg'
 export const GITHUB_HOME = 'https://github.com/SingularityLabs-ai/chatgpt-on-bard-extension'
+
+import twitterIcon from '../assets/icons/twitter-black-thin.svg'
+export const TWITTER_HOME = 'https://twitter.com/labssingularity'
 
 import linkedinIcon from '../assets/icons/linkedin-black-thin.svg'
 export const LINKEDIN_HOME = 'https://www.linkedin.com/company/singularity-labs-ai'
