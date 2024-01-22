@@ -11,45 +11,17 @@
 
 # ChatGPTonBard
 
-[link-chrome]: https://chrome.google.com/webstore/detail/chatgptonbard-chatgpt-ins/eblbemelhgcmgigmgcmepggaoikjkhoe/related?hl=en&authuser=0 'Chrome Web Store'
 
-[<img src="https://user-images.githubusercontent.com/3750161/214147732-c75e96a4-48a4-4b64-b407-c2402e899a75.PNG" height="67" alt="Chrome" valign="middle">][link-chrome]
+### Install
 
-[![FollowSmallButtonGithub](https://github.com/SingularityLabs-ai/MultiGPT-mini/assets/2527354/a4a46537-669c-4e97-8e5f-05ff083c3070)](https://github.com/SingularityLabs-ai)
-
-## Screenshot
-
-<img width="1031" alt="image" src="https://raw.githubusercontent.com/ishandutta2007/chatgpt-competitive-programming-extension/main/screenshots/spoj.png">
-
-<img width="1031" alt="image" src="https://raw.githubusercontent.com/ishandutta2007/chatgpt-competitive-programming-extension/main/screenshots/codeforces.png">
-
-### TODO
-
-For above sites most probably we have to incercept graphql query
-
-
-POST https://leetcode.com/graphql/
-
-payload: {
-    "query": "
-        query questionContent($titleSlug: String!) {
-            question(titleSlug: $titleSlug) {
-                content
-                mysqlSchemas
-            }
-        }
-    ",
-    "variables": {
-        "titleSlug": "letter-combinations-of-a-phone-number"
-    },
-    "operationName": "questionContent"
-}
-
-## Custom Prompt
-You can change the prompt.
-<img width="1031" alt="image" src="https://raw.githubusercontent.com/ishandutta2007/chatgpt-competitive-programming-extension/main/screenshots/prompt.png">
-
-## Troubleshooting
+<a href="https://chrome.google.com/webstore/detail/eblbemelhgcmgigmgcmepggaoikjkhoe">
+    <img src="https://user-images.githubusercontent.com/64502893/231991498-8df6dd63-727c-41d0-916f-c90c15127de3.png" width="200" alt="Get MultiGPT for Chromium"> 
+</a><a href="https://microsoftedge.microsoft.com/addons/detail/jfnjdpghnehonomgigfndffcfncijocp">
+    <img src="https://user-images.githubusercontent.com/64502893/231991158-1b54f831-2fdc-43b6-bf9a-f894000e5aa8.png" width="160" alt="Get MultiGPT for Microsoft Edge">
+</a>
+<a href="https://chrome.google.com/webstore/detail/eblbemelhgcmgigmgcmepggaoikjkhoe">
+    <img src="https://github.com/SingularityLabs-ai/MultiGPT-mini/assets/2527354/3cd6b087-8878-4829-8d6f-e9d25b1be828" width="200" alt="Get MultiGPT for Brave">
+</a>
 
 ### How to make it work in Brave
 
